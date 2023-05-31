@@ -49,30 +49,26 @@ class Root(tk.Tk):
                                        command=lambda n=i: self.button_click(n))
             self.button[i].grid(row=r, column=c)
 
-        self.fill_board()
+
 
 
     def create_board(self):
         self.board = []
-        row = []
-        row.append(Piece(Type.ROOK, Color.WHITE))
-        row.append(Piece(Type.KNIGHT, Color.WHITE))
-        row.append(Piece(Type.BISHOP, Color.WHITE))
-        row.append(Piece(Type.QUEEN, Color.WHITE))
-        row.append(Piece(Type.KING, Color.WHITE))
-        row.append(Piece(Type.BISHOP, Color.WHITE))
-        row.append(Piece(Type.KNIGHT, Color.WHITE))
-        row.append(Piece(Type.ROOK, Color.WHITE))
-        self.board.append(row)
-
+        
         row1 = []
-        for i in range(8):
-            row1.append(Piece(Type.PAWN, Color.WHITE))
+        row1.append(Piece(Type.ROOK, Color.WHITE))
+        row1.append(Piece(Type.KNIGHT, Color.WHITE))
+        row1.append(Piece(Type.BISHOP, Color.WHITE))
+        row1.append(Piece(Type.QUEEN, Color.WHITE))
+        row1.append(Piece(Type.KING, Color.WHITE))
+        row1.append(Piece(Type.BISHOP, Color.WHITE))
+        row1.append(Piece(Type.KNIGHT, Color.WHITE))
+        row1.append(Piece(Type.ROOK, Color.WHITE))
         self.board.append(row1)
 
         row2 = []
         for i in range(8):
-            row2.append(Piece(Type.NONE, Color.NONE))
+            row2.append(Piece(Type.PAWN, Color.WHITE))
         self.board.append(row2)
 
         row3 = []
@@ -92,20 +88,25 @@ class Root(tk.Tk):
 
         row6 = []
         for i in range(8):
-            row6.append(Piece(Type.PAWN, Color.BLACK))
-        print("len(row6):", len(row6))
+            row6.append(Piece(Type.NONE, Color.NONE))
         self.board.append(row6)
 
         row7 = []
-        row7.append(Piece(Type.ROOK, Color.BLACK))
-        row7.append(Piece(Type.KNIGHT, Color.BLACK))
-        row7.append(Piece(Type.BISHOP, Color.BLACK))
-        row7.append(Piece(Type.QUEEN, Color.BLACK))
-        row7.append(Piece(Type.KING, Color.BLACK))
-        row7.append(Piece(Type.BISHOP, Color.BLACK))
-        row7.append(Piece(Type.KNIGHT, Color.BLACK))
-        row7.append(Piece(Type.ROOK, Color.BLACK))
+        for i in range(8):
+            row7.append(Piece(Type.PAWN, Color.BLACK))
+        print("len(row7):", len(row7))
         self.board.append(row7)
+
+        row8 = []
+        row8.append(Piece(Type.ROOK, Color.BLACK))
+        row8.append(Piece(Type.KNIGHT, Color.BLACK))
+        row8.append(Piece(Type.BISHOP, Color.BLACK))
+        row8.append(Piece(Type.QUEEN, Color.BLACK))
+        row8.append(Piece(Type.KING, Color.BLACK))
+        row8.append(Piece(Type.BISHOP, Color.BLACK))
+        row8.append(Piece(Type.KNIGHT, Color.BLACK))
+        row8.append(Piece(Type.ROOK, Color.BLACK))
+        self.board.append(row8)
         for row in self.board:
             r = ""
             for p in row:
@@ -149,10 +150,9 @@ class Root(tk.Tk):
 
 
     def piece_to_string(self, x, y):
-        character = ' '
         print("x:", x)
         print("y:", y)
-        print("self.board[y][x]:", self.board[y][x])
+        print("self.board[y][x]:", str(self.board[y][x]))
         if self.board[y][x].type==Type.KING and self.board[y][x].color==Color.WHITE:
             return 'K'
         if self.board[y][x].type==Type.KING and self.board[y][x].color==Color.BLACK:
@@ -178,18 +178,19 @@ class Root(tk.Tk):
         if self.board[y][x].type==Type.PAWN and self.board[y][x].color==Color.BLACK:
             return 'P'
 
-        return character
+        return ' '
 
 
     def fill_board(self):
+        
+        rows, cols = (8, 8)
+        self.board = [[Piece(Type.NONE, Color.NONE)]*cols]*rows
         for i in range(8):
             self.board[i][1] = Piece(Type.PAWN, Color.WHITE)
 
         for i in range(8):
             self.board[i][6] = Piece(Type.PAWN, Color.BLACK)
 
-
-        # p1 = Piece(Type.ROOK, Color.WHITE)
 
         self.board[0][0] = Piece(Type.ROOK, Color.WHITE)
         self.board[7][0] = Piece(Type.ROOK, Color.WHITE)
@@ -199,7 +200,7 @@ class Root(tk.Tk):
         self.board[5][0] = Piece(Type.KING, Color.WHITE)
 
 
-        self.board[0][7]= Piece(Type.ROOK, Color.BLACK)
+        self.board[0][7] = Piece(Type.ROOK, Color.BLACK)
         self.board[7][7] = Piece(Type.ROOK, Color.BLACK)
         self.board[1][7] = Piece(Type.BISHOP, Color.BLACK)
         self.board[6][7] = Piece(Type.BISHOP, Color.BLACK)
@@ -207,6 +208,7 @@ class Root(tk.Tk):
         self.board[5][7] = Piece(Type.KING, Color.BLACK)
 
         # print(self.board)
+        return self.board
 
 
 
