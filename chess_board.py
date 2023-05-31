@@ -1,4 +1,4 @@
-# grid_layout.py
+
 import random
 import tkinter as tk
 from enum import Enum
