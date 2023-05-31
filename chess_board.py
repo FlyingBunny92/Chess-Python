@@ -33,11 +33,6 @@ class Root(tk.Tk):
         self.title('Grid Layout')
         self.geometry('200x200')
 
-        rows, cols = (8, 8)
-        '''
-        arr = [[Piece(Type.PAWN, Color.WHITE)]*cols]*rows
-        self.board = arr
-        '''
         self.board = self.create_board()
         self.frame = tk.Frame()
         self.frame.pack(expand=True)
@@ -45,7 +40,10 @@ class Root(tk.Tk):
         self.button = [None] * 64
         for i in range(64):
             r, c = divmod(i, 8)
-            self.button[i] = tk.Button(self.frame, text=' ', font='TkFixedFont',
+            x = (i%8)
+            y = int(i/8)
+            txt  = self.piece_to_string(x, y)
+            self.button[i] = tk.Button(self.frame, text=txt, font='TkFixedFont',
                                        command=lambda n=i: self.button_click(n))
             self.button[i].grid(row=r, column=c)
 
@@ -211,20 +209,18 @@ class Root(tk.Tk):
         return self.board
 
 
-
-
     def button_click(self, n):
         choice = random.randrange(2)
         x = (n%8)
         y = int(n/8)
-        # print("\n\n\n\n ")
-        # print(" x:", x)
-        # print(" y:", y)
-
-        # txt = str(self.board[y][x])
         txt  = self.piece_to_string(x, y)
         print("txt:", txt)
-        character, color = (('x', 'red'), ('o', 'green'))[choice]
+        # character, color = (('x', 'red'), ('o', 'green'))[choice]
+        color = 'red'
+        if self.board[y][x].color == Color.BLACK:
+            color = 'green'
+        if self.board[y][x].color == Color.WHITE:
+            color = 'red'
         self.button[n]['text'] = txt
         self.button[n]['fg'] = color
 
