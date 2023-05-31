@@ -43,9 +43,16 @@ class Root(tk.Tk):
             x = (i%8)
             y = int(i/8)
             txt  = self.piece_to_string(x, y)
+            color = 'blue'
+            if self.board[y][x].color == Color.BLACK:
+                color = 'yellow'
+            if self.board[y][x].color == Color.WHITE:
+                color = 'blue'
+
             self.button[i] = tk.Button(self.frame, text=txt, font='TkFixedFont',
                                        command=lambda n=i: self.button_click(n))
             self.button[i].grid(row=r, column=c)
+            self.button[i]['fg'] = color
 
 
 
