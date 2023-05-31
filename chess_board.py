@@ -4,22 +4,26 @@ import tkinter as tk
 from enum import Enum
 
 
+class Type(Enum):
+    KING = 1
+    QUEEN = 2
+    ROOK = 3
+    KNIGHT = 4
+    BISHOP = 5
+    PAWN = 6
+    NONE = 7
+
+class Color(Enum):
+    WHITE = 1
+    BLACK = 2
+    NONE = 3
+
 
  
-class Piece(Enum):
-    KING_WHITE = 1
-    QUEEN_WHITE = 2
-    ROOK_WHITE = 3
-    KNIGHT_WHITE = 4
-    BISHOP_WHITE = 5
-    PAWN_WHITE = 6
-
-    KING_BLACK = 1
-    QUEEN_BLACK = 2
-    ROOK_BLACK = 3
-    KNIGHT_BLACK = 4
-    BISHOP_BLACK = 5
-    PAWN_BLACK = 6
+class Piece():
+    def __init__(self, type, color):
+        self.type = type
+        self.color = color
         
 
 class Root(tk.Tk):
@@ -30,8 +34,11 @@ class Root(tk.Tk):
         self.geometry('200x200')
 
         rows, cols = (8, 8)
-        arr = [[0]*cols]*rows
+        '''
+        arr = [[Piece(Type.PAWN, Color.WHITE)]*cols]*rows
         self.board = arr
+        '''
+        self.board = self.create_board()
         self.frame = tk.Frame()
         self.frame.pack(expand=True)
 
@@ -44,72 +51,177 @@ class Root(tk.Tk):
 
         self.fill_board()
 
+
+    def create_board(self):
+        self.board = []
+        row = []
+        row.append(Piece(Type.ROOK, Color.WHITE))
+        row.append(Piece(Type.KNIGHT, Color.WHITE))
+        row.append(Piece(Type.BISHOP, Color.WHITE))
+        row.append(Piece(Type.QUEEN, Color.WHITE))
+        row.append(Piece(Type.KING, Color.WHITE))
+        row.append(Piece(Type.BISHOP, Color.WHITE))
+        row.append(Piece(Type.KNIGHT, Color.WHITE))
+        row.append(Piece(Type.ROOK, Color.WHITE))
+        self.board.append(row)
+
+        row1 = []
+        for i in range(8):
+            row1.append(Piece(Type.PAWN, Color.WHITE))
+        self.board.append(row1)
+
+        row2 = []
+        for i in range(8):
+            row2.append(Piece(Type.NONE, Color.NONE))
+        self.board.append(row2)
+
+        row3 = []
+        for i in range(8):
+            row3.append(Piece(Type.NONE, Color.NONE))
+        self.board.append(row3)
+
+        row4 = []
+        for i in range(8):
+            row4.append(Piece(Type.NONE, Color.NONE))
+        self.board.append(row4)
+
+        row5 = []
+        for i in range(8):
+            row5.append(Piece(Type.NONE, Color.NONE))
+        self.board.append(row5)
+
+        row6 = []
+        for i in range(8):
+            row6.append(Piece(Type.PAWN, Color.BLACK))
+        print("len(row6):", len(row6))
+        self.board.append(row6)
+
+        row7 = []
+        row7.append(Piece(Type.ROOK, Color.BLACK))
+        row7.append(Piece(Type.KNIGHT, Color.BLACK))
+        row7.append(Piece(Type.BISHOP, Color.BLACK))
+        row7.append(Piece(Type.QUEEN, Color.BLACK))
+        row7.append(Piece(Type.KING, Color.BLACK))
+        row7.append(Piece(Type.BISHOP, Color.BLACK))
+        row7.append(Piece(Type.KNIGHT, Color.BLACK))
+        row7.append(Piece(Type.ROOK, Color.BLACK))
+        self.board.append(row7)
+        for row in self.board:
+            r = ""
+            for p in row:
+                r += (self.print_piece(p)) + " "
+
+            print(r)
+            print("\n")
+        return self.board
+
+
+    def print_piece(self, p):
+        character = ' '
+        if p.type==Type.KING and p.color==Color.WHITE:
+            return 'K'
+        if p.type==Type.KING and p.color==Color.BLACK:
+            return 'K'
+        if p.type==Type.QUEEN and p.color==Color.WHITE:
+            return 'Q'
+        if p.type==Type.QUEEN and p.color==Color.BLACK:
+            return 'Q'
+        if p.type==Type.ROOK and p.color==Color.WHITE:
+            return 'R'
+        if p.type==Type.ROOK and p.color==Color.BLACK:
+            return 'R'
+        if p.type==Type.KNIGHT and p.color==Color.WHITE:
+            return 'KN'
+        if p.type==Type.KNIGHT and p.color==Color.BLACK:
+            return 'KN'
+        if p.type==Type.BISHOP and p.color==Color.WHITE:
+            return 'B'
+        if p.type==Type.BISHOP and p.color==Color.BLACK:
+            return 'B'
+        if p.type==Type.BISHOP and p.color==Color.WHITE:
+            return 'B'
+        if p.type==Type.PAWN and p.color==Color.BLACK:
+            return 'P'
+        if p.type==Type.PAWN and p.color==Color.WHITE:
+            return 'P'
+
+        return character
+
+
     def piece_to_string(self, x, y):
         character = ' '
-        print("self.board[x][y]:", self.board[x][y])
-        if self.board[x][y] ==  Piece.KING_WHITE:
-            character = 'K'
-        if self.board[x][y] ==  Piece.KING_BLACK:
-            character = 'K'
-        if self.board[x][y] ==  Piece.QUEEN_WHITE:
-            character = 'Q'
-        if self.board[x][y] ==  Piece.QUEEN_BLACK:
-            character = 'Q'
-        if self.board[x][y] ==  Piece.ROOK_WHITE:
-            character = 'R'
-        if self.board[x][y] ==  Piece.ROOK_BLACK:
-            character = 'R'
-        if self.board[x][y] ==  Piece.KNIGHT_WHITE:
-            character = 'KN'
-        if self.board[x][y] ==  Piece.KNIGHT_BLACK:
-            character = 'KN'
-        if self.board[x][y] ==  Piece.BISHOP_BLACK:
-            character = 'B'
-        if self.board[x][y] ==  Piece.BISHOP_WHITE:
-            character = 'B'
-        if self.board[x][y] ==  Piece.PAWN_WHITE:
-            character = 'P'
-        if self.board[x][y] ==  Piece.PAWN_BLACK:
-            character = 'P'
+        print("x:", x)
+        print("y:", y)
+        print("self.board[y][x]:", self.board[y][x])
+        if self.board[y][x].type==Type.KING and self.board[y][x].color==Color.WHITE:
+            return 'K'
+        if self.board[y][x].type==Type.KING and self.board[y][x].color==Color.BLACK:
+            return 'K'
+        if self.board[y][x].type==Type.QUEEN and self.board[y][x].color==Color.WHITE:
+            return 'Q'
+        if self.board[y][x].type==Type.QUEEN and self.board[y][x].color==Color.BLACK:
+            return 'Q'
+        if self.board[y][x].type==Type.ROOK and self.board[y][x].color==Color.WHITE:
+            return 'R'
+        if self.board[y][x].type==Type.ROOK and self.board[y][x].color==Color.BLACK:
+            return 'R'
+        if self.board[y][x].type==Type.KNIGHT and self.board[y][x].color==Color.WHITE:
+            return 'KN'
+        if self.board[y][x].type==Type.KNIGHT and self.board[y][x].color==Color.BLACK:
+            return 'KN'
+        if self.board[y][x].type==Type.BISHOP and self.board[y][x].color==Color.WHITE:
+            return 'B'
+        if self.board[y][x].type==Type.BISHOP and self.board[y][x].color==Color.BLACK:
+            return 'B'
+        if self.board[y][x].type==Type.PAWN and self.board[y][x].color==Color.WHITE:
+            return 'P'
+        if self.board[y][x].type==Type.PAWN and self.board[y][x].color==Color.BLACK:
+            return 'P'
 
         return character
 
 
     def fill_board(self):
         for i in range(8):
-            self.board[i][1] = (Piece.PAWN_WHITE)
+            self.board[i][1] = Piece(Type.PAWN, Color.WHITE)
 
         for i in range(8):
-            self.board[i][6] = (Piece.PAWN_BLACK)
-
-        self.board[0][0] = (Piece.ROOK_WHITE)
-        self.board[7][0] = (Piece.ROOK_WHITE)
-        self.board[1][0] = (Piece.BISHOP_WHITE)
-        self.board[6][0] = (Piece.BISHOP_WHITE)
-        self.board[3][0] = (Piece.QUEEN_WHITE)
-        self.board[5][0] = (Piece.KING_WHITE)
+            self.board[i][6] = Piece(Type.PAWN, Color.BLACK)
 
 
-        self.board[0][7]= (Piece.ROOK_BLACK)
-        self.board[7][7] = (Piece.ROOK_BLACK)
-        self.board[1][7] = (Piece.BISHOP_BLACK)
-        self.board[6][7] = (Piece.BISHOP_BLACK)
-        self.board[3][7] = (Piece.QUEEN_BLACK)
-        self.board[5][7] = (Piece.KING_BLACK)
+        # p1 = Piece(Type.ROOK, Color.WHITE)
+
+        self.board[0][0] = Piece(Type.ROOK, Color.WHITE)
+        self.board[7][0] = Piece(Type.ROOK, Color.WHITE)
+        self.board[1][0] = Piece(Type.BISHOP, Color.WHITE)
+        self.board[6][0] = Piece(Type.BISHOP, Color.WHITE)
+        self.board[3][0] = Piece(Type.QUEEN, Color.WHITE)
+        self.board[5][0] = Piece(Type.KING, Color.WHITE)
+
+
+        self.board[0][7]= Piece(Type.ROOK, Color.BLACK)
+        self.board[7][7] = Piece(Type.ROOK, Color.BLACK)
+        self.board[1][7] = Piece(Type.BISHOP, Color.BLACK)
+        self.board[6][7] = Piece(Type.BISHOP, Color.BLACK)
+        self.board[3][7] = Piece(Type.QUEEN, Color.BLACK)
+        self.board[5][7] = Piece(Type.KING, Color.BLACK)
 
         # print(self.board)
+
+
 
 
     def button_click(self, n):
         choice = random.randrange(2)
         x = (n%8)
         y = int(n/8)
-        print("\n\n\n\n ")
-        print(" x:", x)
-        print(" y:", y)
+        # print("\n\n\n\n ")
+        # print(" x:", x)
+        # print(" y:", y)
 
-        # txt = str(self.board[x][y])
+        # txt = str(self.board[y][x])
         txt  = self.piece_to_string(x, y)
+        print("txt:", txt)
         character, color = (('x', 'red'), ('o', 'green'))[choice]
         self.button[n]['text'] = txt
         self.button[n]['fg'] = color
