@@ -222,7 +222,7 @@ class Root(tk.Tk):
 
 
     def button_click(self, n):
-        choice = random.randrange(2)
+        # choice = random.randrange(2)
         x = (n%8)
         y = int(n/8)
         txt  = self.piece_to_string(x, y)
