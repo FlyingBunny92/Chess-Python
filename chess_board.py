@@ -24,6 +24,7 @@ class Piece():
     def __init__(self, type, color):
         self.type = type
         self.color = color
+        self.activated = False
         
 
 class Root(tk.Tk):
@@ -32,6 +33,10 @@ class Root(tk.Tk):
 
         self.title('Grid Layout')
         self.geometry('200x200')
+
+        self.active_node = Piece(Type.NONE, Color.NONE)
+        self.active_x = -1
+        self.active_y = -1
 
         self.board = self.create_board()
         self.frame = tk.Frame()
@@ -45,7 +50,7 @@ class Root(tk.Tk):
             txt  = self.piece_to_string(x, y)
             color = 'blue'
             if self.board[y][x].color == Color.BLACK:
-                color = 'yellow'
+                color = 'green'
             if self.board[y][x].color == Color.WHITE:
                 color = 'blue'
 
@@ -222,7 +227,6 @@ class Root(tk.Tk):
         y = int(n/8)
         txt  = self.piece_to_string(x, y)
         print("txt:", txt)
-        # character, color = (('x', 'red'), ('o', 'green'))[choice]
         color = 'red'
         if self.board[y][x].color == Color.BLACK:
             color = 'green'
@@ -230,6 +234,26 @@ class Root(tk.Tk):
             color = 'red'
         self.button[n]['text'] = txt
         self.button[n]['fg'] = color
+
+
+
+        if self.board[y][x].color == Color.NONE and self.board[y][x].type == Type.NONE:
+            print("if self.board[y][x].color == Color.NONE and self.board[y][x].type == Type.NONE")
+            if self.active_x != -1 and self.active_y != -1:
+                print("if self.active_x != -1 and self.active_y != -1:")
+                self.board[y][x] = Piece(self.board[self.active_y][self.active_x].type, self.board[self.active_y][self.active_x].color)
+                self.board[self.active_y][self.active_x] = Piece(Type.NONE, Color.NONE)
+
+                '''
+                self.board[y][x].color = self.board[self.active_y][self.active_x].color
+                self.board[y][x].type = self.board[self.active_y][self.active_x].type
+                '''
+
+        # self.board[y][x].activated = True
+        # self.active_node = self.board[y][x]
+        self.active_x = x
+        self.active_y = y
+
 
 if __name__ == '__main__':
     root = Root()
