@@ -21,10 +21,13 @@ class Color(Enum):
 
  
 class Piece():
-    def __init__(self, type, color):
+    def __init__(self, type, color, x, y):
         self.type = type
         self.color = color
         self.activated = False
+        self.x = x
+        self.y = y
+        
         
 
 class Root(tk.Tk):
@@ -34,7 +37,7 @@ class Root(tk.Tk):
         self.title('Grid Layout')
         self.geometry('200x200')
 
-        self.active_node = Piece(Type.NONE, Color.NONE)
+        self.active_node = None
         self.active_x = -1
         self.active_y = -1
 
@@ -66,64 +69,62 @@ class Root(tk.Tk):
         self.board = []
         
         row1 = []
-        row1.append(Piece(Type.ROOK, Color.WHITE))
-        row1.append(Piece(Type.KNIGHT, Color.WHITE))
-        row1.append(Piece(Type.BISHOP, Color.WHITE))
-        row1.append(Piece(Type.QUEEN, Color.WHITE))
-        row1.append(Piece(Type.KING, Color.WHITE))
-        row1.append(Piece(Type.BISHOP, Color.WHITE))
-        row1.append(Piece(Type.KNIGHT, Color.WHITE))
-        row1.append(Piece(Type.ROOK, Color.WHITE))
+        row1.append(Piece(Type.ROOK, Color.WHITE, 0, 0))
+        row1.append(Piece(Type.KNIGHT, Color.WHITE, 1, 0))
+        row1.append(Piece(Type.BISHOP, Color.WHITE, 2, 0))
+        row1.append(Piece(Type.QUEEN, Color.WHITE, 3, 0))
+        row1.append(Piece(Type.KING, Color.WHITE, 4, 0))
+        row1.append(Piece(Type.BISHOP, Color.WHITE, 5, 0))
+        row1.append(Piece(Type.KNIGHT, Color.WHITE, 6, 0))
+        row1.append(Piece(Type.ROOK, Color.WHITE, 7, 0))
         self.board.append(row1)
 
         row2 = []
         for i in range(8):
-            row2.append(Piece(Type.PAWN, Color.WHITE))
+            row2.append(Piece(Type.PAWN, Color.WHITE, i, 1))
         self.board.append(row2)
 
         row3 = []
         for i in range(8):
-            row3.append(Piece(Type.NONE, Color.NONE))
+            row3.append(Piece(Type.NONE, Color.NONE, i, 2))
         self.board.append(row3)
 
         row4 = []
         for i in range(8):
-            row4.append(Piece(Type.NONE, Color.NONE))
+            row4.append(Piece(Type.NONE, Color.NONE, i, 3))
         self.board.append(row4)
 
         row5 = []
         for i in range(8):
-            row5.append(Piece(Type.NONE, Color.NONE))
+            row5.append(Piece(Type.NONE, Color.NONE, i, 4))
         self.board.append(row5)
 
         row6 = []
         for i in range(8):
-            row6.append(Piece(Type.NONE, Color.NONE))
+            row6.append(Piece(Type.NONE, Color.NONE, i, 5))
         self.board.append(row6)
 
         row7 = []
         for i in range(8):
-            row7.append(Piece(Type.PAWN, Color.BLACK))
-        print("len(row7):", len(row7))
+            row7.append(Piece(Type.PAWN, Color.BLACK, i, 6))
         self.board.append(row7)
 
         row8 = []
-        row8.append(Piece(Type.ROOK, Color.BLACK))
-        row8.append(Piece(Type.KNIGHT, Color.BLACK))
-        row8.append(Piece(Type.BISHOP, Color.BLACK))
-        row8.append(Piece(Type.QUEEN, Color.BLACK))
-        row8.append(Piece(Type.KING, Color.BLACK))
-        row8.append(Piece(Type.BISHOP, Color.BLACK))
-        row8.append(Piece(Type.KNIGHT, Color.BLACK))
-        row8.append(Piece(Type.ROOK, Color.BLACK))
+        row8.append(Piece(Type.ROOK, Color.BLACK, 0, 7))
+        row8.append(Piece(Type.KNIGHT, Color.BLACK, 1, 7))
+        row8.append(Piece(Type.BISHOP, Color.BLACK, 2, 7))
+        row8.append(Piece(Type.QUEEN, Color.BLACK, 3, 7))
+        row8.append(Piece(Type.KING, Color.BLACK, 4, 7))
+        row8.append(Piece(Type.BISHOP, Color.BLACK, 5, 7))
+        row8.append(Piece(Type.KNIGHT, Color.BLACK, 6, 7))
+        row8.append(Piece(Type.ROOK, Color.BLACK, 7, 7))
         self.board.append(row8)
         for row in self.board:
             r = ""
             for p in row:
                 r += (self.print_piece(p)) + " "
 
-            print(r)
-            print("\n")
+
         return self.board
 
 
@@ -145,8 +146,6 @@ class Root(tk.Tk):
             return 'KN'
         if p.type==Type.KNIGHT and p.color==Color.BLACK:
             return 'KN'
-        if p.type==Type.BISHOP and p.color==Color.WHITE:
-            return 'B'
         if p.type==Type.BISHOP and p.color==Color.BLACK:
             return 'B'
         if p.type==Type.BISHOP and p.color==Color.WHITE:
@@ -160,9 +159,7 @@ class Root(tk.Tk):
 
 
     def piece_to_string(self, x, y):
-        print("x:", x)
-        print("y:", y)
-        print("self.board[y][x]:", str(self.board[y][x]))
+
         if self.board[y][x].type==Type.KING and self.board[y][x].color==Color.WHITE:
             return 'K'
         if self.board[y][x].type==Type.KING and self.board[y][x].color==Color.BLACK:
@@ -194,30 +191,29 @@ class Root(tk.Tk):
     def fill_board(self):
         
         rows, cols = (8, 8)
-        self.board = [[Piece(Type.NONE, Color.NONE)]*cols]*rows
+        self.board = [[Piece(Type.NONE, Color.NONE, -1, -1)]*cols]*rows
         for i in range(8):
-            self.board[i][1] = Piece(Type.PAWN, Color.WHITE)
+            self.board[i][1] = Piece(Type.PAWN, Color.WHITE, i, 1)
 
         for i in range(8):
-            self.board[i][6] = Piece(Type.PAWN, Color.BLACK)
+            self.board[i][6] = Piece(Type.PAWN, Color.BLACK, i, 6)
 
 
-        self.board[0][0] = Piece(Type.ROOK, Color.WHITE)
-        self.board[7][0] = Piece(Type.ROOK, Color.WHITE)
-        self.board[1][0] = Piece(Type.BISHOP, Color.WHITE)
-        self.board[6][0] = Piece(Type.BISHOP, Color.WHITE)
-        self.board[3][0] = Piece(Type.QUEEN, Color.WHITE)
-        self.board[5][0] = Piece(Type.KING, Color.WHITE)
+        self.board[0][0] = Piece(Type.ROOK, Color.WHITE, 0, 0)
+        self.board[7][0] = Piece(Type.ROOK, Color.WHITE, 7, 0)
+        self.board[1][0] = Piece(Type.BISHOP, Color.WHITE, 1, 0)
+        self.board[6][0] = Piece(Type.BISHOP, Color.WHITE, 6, 0)
+        self.board[3][0] = Piece(Type.QUEEN, Color.WHITE, 3, 0)
+        self.board[5][0] = Piece(Type.KING, Color.WHITE, 5, 0)
 
 
-        self.board[0][7] = Piece(Type.ROOK, Color.BLACK)
-        self.board[7][7] = Piece(Type.ROOK, Color.BLACK)
-        self.board[1][7] = Piece(Type.BISHOP, Color.BLACK)
-        self.board[6][7] = Piece(Type.BISHOP, Color.BLACK)
-        self.board[3][7] = Piece(Type.QUEEN, Color.BLACK)
-        self.board[5][7] = Piece(Type.KING, Color.BLACK)
+        self.board[0][7] = Piece(Type.ROOK, Color.BLACK, 0, 7)
+        self.board[7][7] = Piece(Type.ROOK, Color.BLACK, 7, 7)
+        self.board[1][7] = Piece(Type.BISHOP, Color.BLACK, 1, 7)
+        self.board[6][7] = Piece(Type.BISHOP, Color.BLACK, 6, 7)
+        self.board[3][7] = Piece(Type.QUEEN, Color.BLACK, 3, 7)
+        self.board[5][7] = Piece(Type.KING, Color.BLACK, 5, 7)
 
-        # print(self.board)
         return self.board
 
 
@@ -249,39 +245,112 @@ class Root(tk.Tk):
         self.button[i1]['fg'] = color2
 
 
+
+    def check_piece_moves(self, coords1, coords2):
+        x1 = coords1[0]
+        y1 = coords1[1]
+        x2 = coords2[0]
+        y2 = coords2[1]
+
+        if self.active_node == None:
+            return False 
+
+        if self.active_node.type==Type.PAWN and self.active_node.color==Color.WHITE:
+            if abs(x1-x2) == 1 and (y1-y2) == 1:
+                return True
+            return False 
+                
+        if self.active_node.type==Type.PAWN and self.active_node.color==Color.BLACK:
+            if abs(x1-x2) == 1 and (y1-y2) == -1:
+                return True
+            return False
+            
+        if self.active_node.type==Type.BISHOP:
+            if abs(x1-x2) == abs(y1-y2):
+                return True
+            return False
+            
+        if self.active_node.type==Type.KNIGHT:
+            if (abs(x1-x2) == 2) and (abs(y1-y2) == 1):
+                return True
+            if (abs(x1-x2) == 1) and (abs(y1-y2) == 2):
+                return True
+            return False
+        
+        if self.active_node.type==Type.ROOK:
+            if (abs(x1-x2) > 1) and (abs(y1-y2) == 0):
+                return True
+            if (abs(x1-x2) == 0) and (abs(y1-y2) > 0):
+                return True
+            return False
+        
+        if self.active_node.type==Type.QUEEN:
+            if abs(x1-x2) == abs(y1-y2):
+                return True
+            if (abs(x1-x2) == 1) and (abs(y1-y2) == 1):
+                return True
+            if (abs(x1-x2) == 1) and (abs(y1-y2) == 0):
+                return True
+            if (abs(x1-x2) == 0) and (abs(y1-y2) == 1):
+                return True
+            return False
+        
+        if self.active_node.type==Type.KING:
+            if (abs(x1-x2) == 1) and (abs(y1-y2) == 1):
+                return True
+            if (abs(x1-x2) == 1) and (abs(y1-y2) == 0):
+                return True
+            if (abs(x1-x2) == 0) and (abs(y1-y2) == 1):
+                return True
+            return False
+
+
+
+        return False
+
+
+
+
+
     def button_click(self, n):
-        # choice = random.randrange(2)
         x = (n%8)
         y = int(n/8)
+        print("n:", n)
+        print("self.board[y][x].color:", self.board[y][x].color)
+        print("self.board[y][x].type:", self.board[y][x].type)
+        print("self.board[y][x]:", self.board[y][x])
         txt  = self.piece_to_string(x, y)
-        print("txt:", txt)
-        color = 'red'
-        if self.board[y][x].color == Color.BLACK:
-            color = 'green'
-        if self.board[y][x].color == Color.WHITE:
+
+        if self.active_node == None:
+            print("if self.active_node == None:")
             color = 'red'
-        self.button[n]['text'] = txt
-        self.button[n]['fg'] = color
+            if self.board[y][x].color == Color.BLACK:
+                color = 'green'
+            if self.board[y][x].color == Color.WHITE:
+                color = 'red'
+            self.button[n]['text'] = txt
+            self.button[n]['fg'] = color
+            self.active_node = self.board[y][x]
+            self.active_node.x = x
+            self.active_node.y = y
+            self.active_x = x
+            self.active_y = y
+
+        result = self.check_piece_moves([x, y], [self.active_x, self.active_y])
+        if result == False:
+            return False
+
+        if self.active_node != None:
+            print("if self.active_x != -1 and self.active_y != -1:")
+            self.board[y][x] = Piece(self.board[self.active_y][self.active_x].type, self.board[self.active_y][self.active_x].color, x, y)
+            self.board[self.active_y][self.active_x] = Piece(Type.NONE, Color.NONE, self.active_x, self.active_y)
+            self.update_buttons([x, y], [self.active_x, self.active_y])
+            self.active_node = None
+
+       
 
 
-
-        if self.board[y][x].color == Color.NONE and self.board[y][x].type == Type.NONE:
-            print("if self.board[y][x].color == Color.NONE and self.board[y][x].type == Type.NONE")
-            if self.active_x != -1 and self.active_y != -1:
-                print("if self.active_x != -1 and self.active_y != -1:")
-                self.board[y][x] = Piece(self.board[self.active_y][self.active_x].type, self.board[self.active_y][self.active_x].color)
-                self.board[self.active_y][self.active_x] = Piece(Type.NONE, Color.NONE)
-
-                '''
-                self.board[y][x].color = self.board[self.active_y][self.active_x].color
-                self.board[y][x].type = self.board[self.active_y][self.active_x].type
-                '''
-                self.update_buttons([x, y], [self.active_x, self.active_y])
-
-        # self.board[y][x].activated = True
-        # self.active_node = self.board[y][x]
-        self.active_x = x
-        self.active_y = y
+        return True
         
 
 
