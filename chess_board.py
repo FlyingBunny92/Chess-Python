@@ -256,7 +256,9 @@ class Root(tk.Tk):
             return False 
 
         if self.active_node.type==Type.PAWN and self.active_node.color==Color.WHITE:
-            if abs(x1-x2) == 1 and (y1-y2) == 1:
+            if abs(x1-x2) == 1 or (y1-y2) == 1:
+                return True
+            if abs(x1-x2) == 1 or (y1-y2) == 1 and self.board[y1][x1].type != Type.NONE:
                 return True
             return False 
                 
