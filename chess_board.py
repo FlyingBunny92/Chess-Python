@@ -37,6 +37,7 @@ class Root(tk.Tk):
         self.title('Grid Layout')
         self.geometry('200x200')
 
+        self.player_turn = 1
         self.active_node = None
         self.active_x = -1
         self.active_y = -1
@@ -256,14 +257,18 @@ class Root(tk.Tk):
             return False 
 
         if self.active_node.type==Type.PAWN and self.active_node.color==Color.WHITE:
-            if abs(x1-x2) == 1 or (y1-y2) == 1:
+            if (y1-y2) == 1:
                 return True
             if abs(x1-x2) == 1 or (y1-y2) == 1 and self.board[y1][x1].type != Type.NONE:
                 return True
             return False 
                 
         if self.active_node.type==Type.PAWN and self.active_node.color==Color.BLACK:
-            if abs(x1-x2) == 1 and (y1-y2) == -1:
+            print("abs(x1-x2):", abs(x1-x2))
+            print("y1-y2:", y1-y2)
+            if (y1-y2) == -1:
+                return True
+            if abs(x1-x2) == 1 or (y1-y2) == -1 and self.board[y1][x1].type != Type.NONE:
                 return True
             return False
             
@@ -323,13 +328,19 @@ class Root(tk.Tk):
         print("self.board[y][x]:", self.board[y][x])
         txt  = self.piece_to_string(x, y)
 
+        # It is not white players turn
+        if self.board[y][x].color == Color.WHITE and self.player_turn == -1:
+            print("It is not white players turn")
+            return False
+        
+        # It is not black players turn
+        if self.board[y][x].color == Color.BLACK and self.player_turn == 1:
+            print("It is not black players turn")
+            return False
+
         if self.active_node == None:
             print("if self.active_node == None:")
             color = 'red'
-            if self.board[y][x].color == Color.BLACK:
-                color = 'green'
-            if self.board[y][x].color == Color.WHITE:
-                color = 'red'
             self.button[n]['text'] = txt
             self.button[n]['fg'] = color
             self.active_node = self.board[y][x]
@@ -343,11 +354,12 @@ class Root(tk.Tk):
             return False
 
         if self.active_node != None:
-            print("if self.active_x != -1 and self.active_y != -1:")
+            print("if self.active_node != None:")
             self.board[y][x] = Piece(self.board[self.active_y][self.active_x].type, self.board[self.active_y][self.active_x].color, x, y)
             self.board[self.active_y][self.active_x] = Piece(Type.NONE, Color.NONE, self.active_x, self.active_y)
             self.update_buttons([x, y], [self.active_x, self.active_y])
             self.active_node = None
+            self.player_turn *= -1
 
        
 
