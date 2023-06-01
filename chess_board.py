@@ -221,6 +221,34 @@ class Root(tk.Tk):
         return self.board
 
 
+    def update_buttons(self, coords1, coords2):
+        x1 = coords1[0]
+        y1 = coords1[1]
+        i1 = (y1*8)+x1
+        x2 = coords2[0]
+        y2 = coords2[1]
+        i2 = (y2*8)+x2
+        txt  = self.piece_to_string(x2, y2)
+        color = 'blue'
+        if self.board[y2][x2].color == Color.BLACK:
+            color = 'green'
+        if self.board[y2][x2].color == Color.WHITE:
+            color = 'blue'
+
+        self.button[i2]['text'] = txt
+        self.button[i2]['fg'] = color
+
+        txt2  = self.piece_to_string(x1, y1)
+        color2 = 'blue'
+        if self.board[y1][x1].color == Color.BLACK:
+            color2 = 'green'
+        if self.board[y1][x1].color == Color.WHITE:
+            color2 = 'blue'
+
+        self.button[i1]['text'] = txt2
+        self.button[i1]['fg'] = color2
+
+
     def button_click(self, n):
         # choice = random.randrange(2)
         x = (n%8)
@@ -248,11 +276,13 @@ class Root(tk.Tk):
                 self.board[y][x].color = self.board[self.active_y][self.active_x].color
                 self.board[y][x].type = self.board[self.active_y][self.active_x].type
                 '''
+                self.update_buttons([x, y], [self.active_x, self.active_y])
 
         # self.board[y][x].activated = True
         # self.active_node = self.board[y][x]
         self.active_x = x
         self.active_y = y
+        
 
 
 if __name__ == '__main__':
